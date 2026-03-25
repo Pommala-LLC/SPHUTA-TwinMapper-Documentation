@@ -1,6 +1,6 @@
 # TwinMapper — Formal Feature Matrix
 
-This is the locked writing baseline for TwinMapper. All seven buckets are explicitly separated: Core, Additional, Optional, Open Implementation Decisions, Hard Non-Goals, External, and Deferred from V1.
+This is the locked writing baseline for TwinMapper. All seven buckets are explicitly separated: Core, Additional, Optional, Open Implementation Decisions, Hard Non-Goals, External, and Roadmap Beyond V1.
 
 ---
 
