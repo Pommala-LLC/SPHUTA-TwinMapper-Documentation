@@ -1,4 +1,7 @@
-# TwinMapper — Competitor Analysis
+# SPHUTA - TwinMapper — Competitor Analysis
+
+> **SPHUTA** — Enterprise Integration Platform  
+> **TwinMapper** — Compile-time-first, schema-driven code generation and mapping framework
 
 ## Positioning Statement
 
