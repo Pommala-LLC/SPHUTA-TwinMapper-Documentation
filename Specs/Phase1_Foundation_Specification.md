@@ -1,4 +1,4 @@
-# SPHUTA : TwinMapper — Phase 1 Foundation Specification
+# SPHUTA TwinMapper — Phase 1 Foundation Specification
 
 **Version:** Final Lock  
 **Platform:** SPHUTA — Enterprise Integration Platform  
@@ -59,7 +59,8 @@ Phase 1 defines:
 | Mapping type fields | `TypeReference` (not raw String) |
 | Mapping path fields | `FieldPath` (not raw String) |
 | Extension metadata | Deferred |
-| Source traceability | Single `SourceLocation` — no range, no reference |
+| Source traceability | Composed `SourceLocation` with `SourcePosition` helper — no range, no reference |
+| Source model | `DefinitionSource`, `DocumentFormat` grouped in `core.source` alongside `SourceLocation` |
 | VersionDefinition | Dropped — version lives only in `DefinitionSetId` |
 | Exception hierarchy | Full hierarchy defined in core; Phase 1 uses subset |
 | ConfigurationException | Dropped — no concrete use case |
@@ -85,9 +86,107 @@ twinmapper-definition-model
 | Format-neutral canonical model | No YAML, JSON, or BPMN concepts in the model |
 | Immutable public model objects | All public canonical types are immutable; builders are mutable |
 | Typed diagnostic structure | Structured payloads, not raw strings or generic metadata maps |
-| Single source-location abstraction | Point-based traceability, not range-based |
+| Single source-location abstraction | Point-based traceability via composed `SourceLocation` + `SourcePosition`, not range-based |
 | Structured identity | Namespace + name + version, not plain strings |
 | Strict phase separation | No later-phase concerns leak into Phase 1 |
+
+### 3.4 Frozen structure
+
+```
+twinmapper-core
+└── net.sphuta.twinmapper.core
+    ├── diagnostic
+    │   ├── TwinMapperDiagnostic
+    │   ├── DiagnosticSeverity
+    │   ├── DiagnosticCode
+    │   ├── DiagnosticCategory
+    │   ├── DiagnosticCollector
+    │   ├── DefaultDiagnosticCollector
+    │   ├── TwinMapperException
+    │   ├── DefinitionException
+    │   ├── BindingException
+    │   ├── MappingException
+    │   ├── ValidationException
+    │   ├── CodegenException
+    │   └── TwinMapperSecurityException
+    ├── naming
+    │   ├── Namespace
+    │   ├── QualifiedName
+    │   └── TypeReference
+    ├── path
+    │   ├── FieldPath
+    │   └── PathSegment
+    ├── policy
+    │   └── CompatibilityMode
+    ├── source
+    │   ├── SourcePosition
+    │   ├── SourceLocation
+    │   ├── DefinitionSource
+    │   └── DocumentFormat
+    ├── spi
+    │   └── DefinitionReader
+    └── util
+        ├── TwinMapperConstants
+        ├── FieldNameUtils
+        └── Preconditions
+```
+
+```
+twinmapper-definition-model
+└── net.sphuta.twinmapper.definition.model
+    ├── DefinitionSet
+    ├── DefinitionSetId
+    ├── GenerationOptionsDefinition
+    ├── ImmutabilityStrategy
+    ├── type
+    │   ├── TypeDefinition
+    │   ├── ObjectTypeDefinition
+    │   ├── EnumTypeDefinition
+    │   └── EnumValueDefinition
+    ├── field
+    │   ├── FieldDefinition
+    │   ├── AliasDefinition
+    │   ├── DefaultValueDefinition
+    │   ├── DeprecationDefinition
+    │   ├── ForbiddenFieldDefinition
+    │   ├── CollectionDefinition
+    │   └── MapDefinition
+    ├── constraint
+    │   ├── TypeConstraints
+    │   ├── FieldConstraints
+    │   └── ConditionalConstraintDefinition
+    ├── mapping
+    │   ├── ObjectMappingDefinition
+    │   ├── FieldMappingDefinition
+    │   ├── ProfileDefinition
+    │   ├── ConverterDefinition
+    │   ├── MapperMode
+    │   ├── NullPolicy
+    │   └── UnmappedTargetPolicy
+    └── validation
+        └── DefinitionModelValidator
+```
+
+### 3.5 Type count
+
+| Module | Package | Types | Count |
+|--------|---------|-------|-------|
+| `twinmapper-core` | `core.diagnostic` | TwinMapperDiagnostic, DiagnosticSeverity, DiagnosticCode, DiagnosticCategory, DiagnosticCollector, DefaultDiagnosticCollector, TwinMapperException, DefinitionException, BindingException, MappingException, ValidationException, CodegenException, TwinMapperSecurityException | 13 |
+| `twinmapper-core` | `core.naming` | Namespace, QualifiedName, TypeReference | 3 |
+| `twinmapper-core` | `core.path` | FieldPath, PathSegment | 2 |
+| `twinmapper-core` | `core.policy` | CompatibilityMode | 1 |
+| `twinmapper-core` | `core.source` | SourcePosition, SourceLocation, DefinitionSource, DocumentFormat | 4 |
+| `twinmapper-core` | `core.spi` | DefinitionReader | 1 |
+| `twinmapper-core` | `core.util` | TwinMapperConstants, FieldNameUtils, Preconditions | 3 |
+| **core total** | | | **27** |
+| `twinmapper-definition-model` | `definition.model` | DefinitionSet, DefinitionSetId, GenerationOptionsDefinition, ImmutabilityStrategy | 4 |
+| `twinmapper-definition-model` | `definition.model.type` | TypeDefinition, ObjectTypeDefinition, EnumTypeDefinition, EnumValueDefinition | 4 |
+| `twinmapper-definition-model` | `definition.model.field` | FieldDefinition, AliasDefinition, DefaultValueDefinition, DeprecationDefinition, ForbiddenFieldDefinition, CollectionDefinition, MapDefinition | 7 |
+| `twinmapper-definition-model` | `definition.model.constraint` | TypeConstraints, FieldConstraints, ConditionalConstraintDefinition | 3 |
+| `twinmapper-definition-model` | `definition.model.mapping` | ObjectMappingDefinition, FieldMappingDefinition, ProfileDefinition, ConverterDefinition, MapperMode, NullPolicy, UnmappedTargetPolicy | 7 |
+| `twinmapper-definition-model` | `definition.model.validation` | DefinitionModelValidator | 1 |
+| **definition-model total** | | | **26** |
+| **Phase 1 total** | | | **53 types + 13 package-info.java = 66 production source files** |
 
 ---
 
@@ -128,8 +227,8 @@ twinmapper-definition-model
 | `core.naming` | Namespace, QualifiedName, TypeReference |
 | `core.path` | FieldPath, PathSegment |
 | `core.policy` | CompatibilityMode (cross-platform only) |
-| `core.source` | SourceLocation |
-| `core.spi` | DefinitionReader, DefinitionSource, DocumentFormat |
+| `core.source` | SourceLocation, SourcePosition, DefinitionSource, DocumentFormat |
+| `core.spi` | DefinitionReader (reader SPI contract only) |
 | `core.util` | Constants, field name conversion, preconditions |
 
 ### 4.5 Package: `core.diagnostic`
@@ -160,7 +259,7 @@ twinmapper-definition-model
 | `severity` | `DiagnosticSeverity` | No | ERROR, WARNING, or INFO |
 | `fieldPath` | `String` | No | Dot-separated path to offending field (empty for root-level) |
 | `message` | `String` | No | Human-readable description |
-| `location` | `SourceLocation` | No | Source file, line, column where diagnostic originated |
+| `location` | `SourceLocation` | No | Source file and position where diagnostic originated (composed with `SourcePosition`) |
 | `targetType` | `String` | Yes | Fully qualified Java type being generated or bound into |
 | `ruleViolated` | `String` | Yes | Description of the constraint that failed |
 | `migrationHint` | `String` | Yes | Guidance for forbidden or deprecated field diagnostics |
@@ -299,29 +398,80 @@ This is the only policy enum in `twinmapper-core`. All other policy enums live i
 
 ### 4.9 Package: `core.source`
 
-#### Types
-
-| Type | Kind | Fields | Description |
-|------|------|--------|-------------|
-| `SourceLocation` | Record | `sourceId` (String), `line` (int), `column` (int), `fragmentId` (String, nullable) | Point-based source traceability. `UNKNOWN` sentinel. Factory methods: `of(sourceId, line, column)`, `ofFile(sourceId)`. |
-
-#### Rules
-
-| Rule | Detail |
-|------|--------|
-| No `SourceRange` | Deferred beyond Phase 1 |
-| No `SourceReference` | Deferred beyond Phase 1 |
-| Traceability model | Point-based only |
-| `UNKNOWN` sentinel | Used for programmatic definitions with no source file |
-
-### 4.10 Package: `core.spi`
+This package contains all source-related types: traceability, definition source descriptors, and format identification.
 
 #### Types
 
 | Type | Kind | Description |
 |------|------|-------------|
-| `DefinitionSource` | Record | Abstract source of definition content. Fields: `location` (String), `formatHint` (DocumentFormat), `inputStreamSupplier` (Supplier). |
-| `DocumentFormat` | Enum | Definition source format: `YAML`, `JSON`, `BPMN`, `UNKNOWN`. |
+| `SourcePosition` | Record | Line/column pair within a source file. Helper value object composed into `SourceLocation`. |
+| `SourceLocation` | Record | Point-based source traceability. Composes `SourcePosition`. `UNKNOWN` sentinel. Factory methods. |
+| `DefinitionSource` | Record | Abstract source of definition content for reader dispatch. |
+| `DocumentFormat` | Enum | Definition source format identifier. |
+
+#### `SourcePosition` fields
+
+| Field | Type | Nullable | Description |
+|-------|------|----------|-------------|
+| `line` | `int` | No | 1-based line number, or 0 if unavailable |
+| `column` | `int` | No | 1-based column number, or 0 if unavailable |
+
+`SourcePosition.ZERO` — sentinel for unknown positions (line=0, column=0).
+
+#### `SourceLocation` fields
+
+| Field | Type | Nullable | Description |
+|-------|------|----------|-------------|
+| `sourceId` | `String` | Yes | File path or resource name |
+| `position` | `SourcePosition` | No | Line and column within the source |
+| `fragmentId` | `String` | Yes | Optional identifier for a fragment within the file (e.g. BPMN element id) |
+
+`SourceLocation.UNKNOWN` — sentinel with null `sourceId`, `SourcePosition.ZERO`, null `fragmentId`.
+
+Factory methods:
+- `SourceLocation.of(sourceId, line, column)` — creates `SourcePosition` internally
+- `SourceLocation.ofFile(sourceId)` — creates with `SourcePosition.ZERO`
+
+Helper methods:
+- `hasPosition()` — delegates to `position.line() > 0`
+- `hasSourceFile()` — true when `sourceId` is non-null and non-blank
+- `toString()` — `"file.yaml:10:5"`, `"file.yaml"`, or `"(unknown)"`
+
+#### `DefinitionSource` fields
+
+| Field | Type | Nullable | Description |
+|-------|------|----------|-------------|
+| `location` | `String` | No | Logical location (file path, classpath resource, URI) |
+| `formatHint` | `DocumentFormat` | No | Format hint for reader dispatch |
+| `inputStreamSupplier` | `Supplier<InputStream>` | No | Supplier to open the source content |
+
+#### `DocumentFormat` values
+
+| Value | Description |
+|-------|-------------|
+| `YAML` | YAML definition source |
+| `JSON` | JSON definition source |
+| `BPMN` | BPMN XML definition source |
+| `UNKNOWN` | Format not determined; reader must inspect content |
+
+#### Source rules
+
+| Rule | Detail |
+|------|--------|
+| No `SourceRange` | Deferred beyond Phase 1 |
+| No `SourceReference` | Deferred beyond Phase 1 |
+| Traceability model | Point-based only, via composed `SourcePosition` |
+| `UNKNOWN` sentinel | Used for programmatic definitions with no source file |
+| Format dispatch | `DocumentFormat` enables `DefinitionReader.supports()` to determine applicability |
+
+### 4.10 Package: `core.spi`
+
+This package contains only the reader SPI contract. Source descriptors and format identification live in `core.source`.
+
+#### Types
+
+| Type | Kind | Description |
+|------|------|-------------|
 | `DefinitionReader<R>` | Interface (generic) | Stable reader SPI boundary. Generic because `core` must not depend on `definition-model`. Contract: `supports(DefinitionSource)`, `read(DefinitionSource, DiagnosticCollector)`. |
 
 #### SPI rules
@@ -333,6 +483,7 @@ This is the only policy enum in `twinmapper-core`. All other policy enums live i
 | No normalizers | Deferred to later phases |
 | No codegen SPIs | Deferred to Phase 3 |
 | Generic reader | `R` is bound to the canonical result type by implementing modules |
+| Source types | `DefinitionSource` and `DocumentFormat` live in `core.source`, not here |
 
 ### 4.11 Package: `core.util`
 
@@ -372,6 +523,7 @@ This is the only policy enum in `twinmapper-core`. All other policy enums live i
 | Name validity | `QualifiedName` always has a valid namespace and non-blank local name |
 | Path normalization | `FieldPath` is always normalized |
 | Source identity | `SourceLocation` always has a source identifier or is `UNKNOWN` |
+| Source composition | `SourceLocation.position` is always a valid `SourcePosition` (never null) |
 | SPI isolation | SPI interfaces must not depend on `definition-model` |
 
 ### 4.13 Core completion criteria
@@ -902,16 +1054,26 @@ In one sentence: `twinmapper-core` defines the shared technical vocabulary, and 
 | 1 | Has STRICT, COMPATIBLE, LENIENT | Unit | Assert all three present |
 | 2 | Exactly three values | Unit | Assert `values().length == 3` |
 
+#### `core.source` — SourcePosition
+
+| # | Test scenario | Type | Assertion |
+|---|--------------|------|-----------|
+| 1 | Valid construction with line and column | Unit | Verify accessors |
+| 2 | `ZERO` sentinel has line=0, column=0 | Unit | Assert zero values |
+| 3 | Equality: same line and column | Unit | Assert equal |
+| 4 | Different line means not equal | Unit | Assert not equal |
+| 5 | HashCode consistency | Unit | Same inputs, same hash |
+
 #### `core.source` — SourceLocation
 
 | # | Test scenario | Type | Assertion |
 |---|--------------|------|-----------|
 | 1 | `UNKNOWN` sentinel is non-null | Unit | Assert non-null |
-| 2 | `UNKNOWN` has expected defaults | Unit | Verify null/zero fields |
-| 3 | `of(sourceId, line, column)` factory | Unit | Verify all fields |
-| 4 | `ofFile(sourceId)` factory | Unit | Verify sourceId, line=0, column=0 |
-| 5 | `hasPosition()` true when line > 0 | Unit | Assert true |
-| 6 | `hasPosition()` false when line = 0 | Unit | Assert false |
+| 2 | `UNKNOWN` has null sourceId, `SourcePosition.ZERO`, null fragmentId | Unit | Verify all defaults |
+| 3 | `of(sourceId, line, column)` factory creates composed `SourcePosition` | Unit | Verify `position().line()` and `position().column()` |
+| 4 | `ofFile(sourceId)` factory creates with `SourcePosition.ZERO` | Unit | Verify sourceId set, position is ZERO |
+| 5 | `hasPosition()` true when `position().line() > 0` | Unit | Assert true |
+| 6 | `hasPosition()` false when `position().line() == 0` | Unit | Assert false |
 | 7 | `hasSourceFile()` true when sourceId present | Unit | Assert true |
 | 8 | `hasSourceFile()` false on UNKNOWN | Unit | Assert false |
 | 9 | `toString()` full: `"file.yaml:10:5"` | Unit | Assert format |
@@ -920,7 +1082,7 @@ In one sentence: `twinmapper-core` defines the shared technical vocabulary, and 
 | 12 | Nullable `fragmentId` accepted | Unit | Build with null, no exception |
 | 13 | Equality and hashCode | Unit | Same inputs equal, same hash |
 
-#### `core.spi` — DefinitionSource
+#### `core.source` — DefinitionSource
 
 | # | Test scenario | Type | Assertion |
 |---|--------------|------|-----------|
@@ -928,7 +1090,13 @@ In one sentence: `twinmapper-core` defines the shared technical vocabulary, and 
 | 2 | `formatHint()` returns expected `DocumentFormat` | Unit | Assert match |
 | 3 | `location()` returns path string | Unit | Assert match |
 | 4 | Stream supplier invocation | Unit | Use `ByteArrayInputStream`, verify readable |
-| 5 | `DocumentFormat` has YAML, JSON, BPMN, UNKNOWN | Unit | Assert all four present |
+
+#### `core.source` — DocumentFormat
+
+| # | Test scenario | Type | Assertion |
+|---|--------------|------|-----------|
+| 1 | Has YAML, JSON, BPMN, UNKNOWN | Unit | Assert all four present |
+| 2 | Exactly four values | Unit | Assert `values().length == 4` |
 
 #### `core.util` — FieldNameUtils
 
@@ -1208,8 +1376,10 @@ In one sentence: `twinmapper-core` defines the shared technical vocabulary, and 
 | core | path — FieldPath | 13 | Pure unit |
 | core | path — PathSegment | 3 | Pure unit |
 | core | policy — CompatibilityMode | 2 | Pure unit |
+| core | source — SourcePosition | 5 | Pure unit |
 | core | source — SourceLocation | 13 | Pure unit |
-| core | spi — DefinitionSource + DocumentFormat | 5 | Pure unit |
+| core | source — DefinitionSource | 4 | Pure unit |
+| core | source — DocumentFormat | 2 | Pure unit |
 | core | util — FieldNameUtils | 11 | Pure unit |
 | core | util — Preconditions | 10 | Pure unit |
 | core | util — TwinMapperConstants | 2 | Pure unit |
@@ -1235,7 +1405,7 @@ In one sentence: `twinmapper-core` defines the shared technical vocabulary, and 
 | definition-model | mapping — ProfileDefinition | 4 | Pure unit |
 | definition-model | mapping — ConverterDefinition | 2 | Pure unit |
 | definition-model | validation — DefinitionModelValidator | 18 | Invariant |
-| **Total** | | **~232** | |
+| **Total** | | **~238** | |
 
 ---
 
