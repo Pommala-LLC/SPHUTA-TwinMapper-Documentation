@@ -116,7 +116,7 @@ TwinMapper is designed to feel native in a Spring Boot application.
 
 ---
 
-## Deferred from V1
+## Roadmap Beyond V1
 
 - Union/discriminator-capable types
 - JSON-based object-mapping DSL
