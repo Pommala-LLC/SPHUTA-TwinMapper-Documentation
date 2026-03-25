@@ -383,7 +383,7 @@ Not TwinMapper features. Enabled by TwinMapper SPIs but built and owned outside 
 
 ---
 
-## Deferred from V1
+## Roadmap Beyond V1
 
 Not part of the current release.
 
