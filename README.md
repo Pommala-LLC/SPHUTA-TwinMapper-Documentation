@@ -1,4 +1,4 @@
-# TwinMapper
+# SPHUTA - TwinMapper
 
 > **Compile-time-first, schema-driven code generation and mapping platform for Java**
 
