@@ -56,7 +56,7 @@ These are tools that TwinMapper makes unnecessary for its target use cases. They
 
 ### Legacy mapping frameworks
 
-Dozer and Orika are older reflection-based mappers still present in legacy codebases. See `migration-guide.md` for migration paths away from both.
+Dozer and Orika are older reflection-based mappers still present in legacy codebases. See [MIGRATION_GUIDE.md](docs/MIGRATION_GUIDE.md) for migration paths away from both.
 
 ---
 
@@ -156,30 +156,30 @@ TwinMapper is designed to feel native in a Spring Boot application.
 
 | Document | Description |
 |---|---|
-| `architecture.md` | Two-engine architecture, module layer map, Spring integration model |
-| `modules.md` | Full module-by-module responsibility and tool reference |
-| `features.md` | Complete feature reference by category and classification |
-| `feature-matrix.md` | Locked feature matrix: Core, Additional, Optional, Hard Non-Goals |
-| `DevelopmentPhase.md` | Ten development phases with entry/exit conditions |
-| `authoring-guide.md` | YAML DSL reference for definitions and mappings |
-| `codegen-contract.md` | Generated artifact shapes, naming conventions, guarantees |
-| `configuration.md` | All configuration properties, Gradle/Maven plugin config |
-| `object-mapping-spec.md` | Object engine full specification |
-| `document-binding-spec.md` | Document engine full specification |
-| `validation-spec.md` | Validation model, constraints, Spring integration |
-| `bpmn-support-matrix.md` | Supported BPMN 2.0 element vocabulary |
-| `spi-extension-guide.md` | All SPI interfaces with registration examples |
-| `testing-strategy.md` | Internal and consumer testing guidance |
-| `security-model.md` | XXE, YAML safe construction, runtime security model |
-| `compatibility.md` | Platform requirements and version compatibility |
-| `decisions.md` | Architecture decision records |
-| `error-catalog.md` | All error codes, triggers, and resolution guidance |
-| `examples.md` | Ten end-to-end examples |
-| `glossary.md` | All terms defined |
-| `migration-guide.md` | Schema migration, MapStruct/ModelMapper/Dozer/Orika migration paths |
-| `faq.md` | Frequently asked questions |
-| `contributing.md` | Contribution guide and standards |
-| `release-strategy.md` | Versioning, release cadence, compatibility promise |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Two-engine architecture, module layer map, Spring integration model |
+| [MODULES.md](docs/MODULES.md) | Full module-by-module responsibility and tool reference |
+| [FEATURES.md](docs/FEATURES.md) | Complete feature reference by category and classification |
+| [FEATURE_MATRIX.md](docs/FEATURE_MATRIX.md) | Locked feature matrix: Core, Additional, Optional, Hard Non-Goals |
+| [DEVELOPMENT_PHASE_DETAILS.md](docs/DEVELOPMENT_PHASE_DETAILS.md) | Ten development phases with entry/exit conditions |
+| [AUTHORING_GUIDE.md](docs/AUTHORING_GUIDE.md) | YAML DSL reference for definitions and mappings |
+| [CODEGEN_CONTRACT.md](docs/CODEGEN_CONTRACT.md) | Generated artifact shapes, naming conventions, guarantees |
+| [CONFIGURATION.md](docs/CONFIGURATION.md) | All configuration properties, Gradle/Maven plugin config |
+| [OBJECT_MAPPING_SPEC.md](docs/OBJECT_MAPPING_SPEC.md) | Object engine full specification |
+| [DOCUMENT_BINDING_SPEC.md](docs/DOCUMENT_BINDING_SPEC.md) | Document engine full specification |
+| [VALIDATION_SPEC.md](docs/VALIDATION_SPEC.md) | Validation model, constraints, Spring integration |
+| [BPMN_SUPPORT_MATRIX.md](docs/BPMN_SUPPORT_MATRIX.md) | Supported BPMN 2.0 element vocabulary |
+| [SPI_EXTENSION_GUIDE.md](docs/SPI_EXTENSION_GUIDE.md) | All SPI interfaces with registration examples |
+| [TESTING_STRATEGY.md](docs/TESTING_STRATEGY.md) | Internal and consumer testing guidance |
+| [SECURITY_MODEL.md](docs/SECURITY_MODEL.md) | XXE, YAML safe construction, runtime security model |
+| [COMPATIBILITY.md](docs/COMPATIBILITY.md) | Platform requirements and version compatibility |
+| [DECISIONS.md](docs/DECISIONS.md) | Architecture decision records |
+| [ERROR_CATALOG.md](docs/ERROR_CATALOG.md) | All error codes, triggers, and resolution guidance |
+| [EXAMPLES.md](docs/EXAMPLES.md) | Ten end-to-end examples |
+| [GLOSSARY.md](docs/GLOSSARY.md) | All terms defined |
+| [MIGRATION_GUIDE.md](docs/MIGRATION_GUIDE.md) | Schema migration, MapStruct/ModelMapper/Dozer/Orika migration paths |
+| [FAQ.md](docs/FAQ.md) | Frequently asked questions |
+| [CONTRIBUTING.md](docs/CONTRIBUTING.md) | Contribution guide and standards |
+| [RELEASE_STRATEGY.md](docs/RELEASE_STRATEGY.md) | Versioning, release cadence, compatibility promise |
 
 ---
 
